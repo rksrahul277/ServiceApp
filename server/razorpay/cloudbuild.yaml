@@ -1,0 +1,16 @@
+steps:
+- name: 'gcr.io/cloud-builders/docker'
+  args: ['build','-t','gcr.io/$PROJECT_ID/razorpay-server','.']
+- name: 'gcr.io/cloud-builders/docker'
+  args: ['push','gcr.io/$PROJECT_ID/razorpay-server']
+- name: 'gcr.io/google.com/cloudsdktool/cloud-sdk'
+  entrypoint: gcloud
+  args:
+  - run
+  - deploy
+  - razorpay-server
+  - --image=gcr.io/$PROJECT_ID/razorpay-server
+  - --region=us-central1
+  - --platform=managed
+  - --allow-unauthenticated
+timeout: '1200s'
